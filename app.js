@@ -1,59 +1,53 @@
 const express= require("express");
 const bodyParser = require("body-parser");
+swaggerJsdoc = require("swagger-jsdoc"),
+swaggerUi = require("swagger-ui-express");
 const app = express();
 
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-const food=[
-    {
-      id: 1,
-      name: "Idly"
+
+
+
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Foodlist Express API with Swagger",
+      version: "0.1.0",
+      description:
+        "This is a simple CRUD API application made with Express and documented with Swagger",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "Foodlist",
+        url: "https://foodlist.com",
+        email: "info@email.com",
+      },
     },
-    {
-      id: 2,
-      name: "Dosa"
-    },
-    {
-      id: 3,
-      name: "Chappathi"
-    },
-    {
-      id: 4,
-      name: "Poori"
-    },
-    {
-      id: 5,
-      name: "Pongal"
-    }
-  ]
-
-app.get("/api/food", function(req, res){
-  
-  res.send(food);
-});
+    servers: [
+      {
+        url: "http://localhost:3000/api/food",
+      },
+    ],
+  },
+  apis: ["./routes/food.js"],
+};
 
 
-app.get("/api/food/:foodId", function(req, res){
-  
+app.use("/api/food", require("./routes/food"));
 
-  for (let index = 0; index < food.length; index++) {
-    const element = food[index];
-    console.log(element.id);
-    console.log(element.name);
-    if (element.id == req.params.foodId) {
-      res.send(element);
-    } else {
-      res.send("Not Matching.");
-    }
-   
-  }
-  
-});
-
-
-
+const specs = swaggerJsdoc(options);
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, { explorer: true })
+);
 
 
 app.listen(3000, function(){
