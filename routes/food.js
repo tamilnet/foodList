@@ -77,7 +77,7 @@ router.get("/", function(req, res){
  *         schema:
  *           type: integer
  *         required: true
- *         description: The food id*
+ *         description: The food id* 
  *     responses:
  *       200:
  *         description: Returns a food.
