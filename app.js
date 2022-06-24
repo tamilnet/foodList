@@ -32,7 +32,7 @@ const options = {
     },
     servers: [
       {
-        url: window.location.origin+"/api/food",
+        url: "/api/food",
       },
     ],
   },
